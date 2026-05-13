@@ -26,12 +26,10 @@
         }
     ]
 </script>
-    
-Consejos Pro de Diseño:
 
     <title>Contacto PWA</title>
 
-    <style>
+   <style>
         :root {
             --primary-green: #2e7d32;
             --dark-green: #1b5e20;
@@ -40,7 +38,7 @@ Consejos Pro de Diseño:
         }
 
         body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background-color: var(--bg-page);
             margin: 0;
             display: flex;
@@ -51,8 +49,8 @@ Consejos Pro de Diseño:
             padding: 20px;
         }
 
-        /* TARJETA MITAD VERDE MITAD BLANCA */
-        #card-pwa {
+        /* TARJETA VISUAL - DISEÑO 50/50 */
+        #card-container {
             width: 100%;
             max-width: 340px;
             background: var(--pure-white);
@@ -64,26 +62,27 @@ Consejos Pro de Diseño:
             text-align: center;
         }
 
-        /* BOTÓN EDITAR MINI */
-        .btn-edit-mini {
+        /* BOTÓN CONFIGURACIÓN */
+        .btn-config {
             position: absolute;
-            top: 12px;
-            right: 12px;
-            background: rgba(0,0,0,0.2);
+            top: 15px;
+            right: 15px;
+            background: rgba(0,0,0,0.15);
             border: none;
             color: white;
-            width: 32px;
-            height: 32px;
+            width: 35px;
+            height: 35px;
             border-radius: 50%;
             cursor: pointer;
             z-index: 10;
             display: flex;
             align-items: center;
             justify-content: center;
+            backdrop-filter: blur(5px);
         }
 
-        /* SECCIÓN SUPERIOR VERDE (50%) */
-        .top-half {
+        /* PARTE SUPERIOR (VERDE) */
+        .card-top {
             height: 160px;
             background: var(--primary-green);
             display: flex;
@@ -92,50 +91,50 @@ Consejos Pro de Diseño:
             padding-bottom: 20px;
         }
 
-        #profile-pic {
+        #display-photo {
             width: 130px;
             height: 130px;
             border-radius: 50%;
             border: 5px solid var(--pure-white);
             object-fit: cover;
-            background: #eee;
+            background: #e0e0e0;
             margin-bottom: -65px;
             z-index: 5;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
-        /* SECCIÓN INFERIOR BLANCA (50%) */
-        .bottom-half {
+        /* PARTE INFERIOR (BLANCA) */
+        .card-bottom {
             padding: 80px 20px 25px 20px;
             background: var(--pure-white);
         }
 
-        .user-info h1 { margin: 0; font-size: 1.6rem; color: var(--dark-green); }
-        .user-info p.role { margin: 5px 0; color: #555; font-size: 1rem; }
-        .user-info .company-tag {
-            font-weight: bold;
-            color: var(--primary-green);
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            margin-bottom: 15px;
-            display: block;
+        .info h1 { margin: 0; font-size: 1.6rem; color: var(--dark-green); }
+        .info .role { margin: 5px 0; color: #555; font-size: 1rem; }
+        .info .company { 
+            font-weight: bold; 
+            color: var(--primary-green); 
+            font-size: 0.8rem; 
+            text-transform: uppercase; 
+            display: block; 
+            margin-bottom: 20px; 
+            letter-spacing: 1px;
         }
 
-        .social-display {
-            font-size: 0.85rem;
+        .contact-details {
+            font-size: 0.9rem;
             color: #444;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             line-height: 1.6;
-            text-align: center;
         }
 
-        /* BOTÓN SHARE TEXTO */
+        /* BOTÓN COMPARTIR */
         .btn-share {
             background: var(--primary-green);
             color: white;
             border: none;
             width: 100%;
-            padding: 14px;
+            padding: 15px;
             border-radius: 12px;
             font-weight: bold;
             font-size: 1rem;
@@ -144,10 +143,13 @@ Consejos Pro de Diseño:
             align-items: center;
             justify-content: center;
             gap: 10px;
+            transition: transform 0.2s;
         }
 
-        /* MODAL */
-        #modal-config {
+        .btn-share:active { transform: scale(0.98); }
+
+        /* MODAL DE CONFIGURACIÓN */
+        #modal-editor {
             display: none;
             position: fixed;
             inset: 0;
@@ -157,176 +159,173 @@ Consejos Pro de Diseño:
             overflow-y: auto;
         }
 
-        .form-field { margin-bottom: 12px; text-align: left; }
-        label { display: block; font-weight: bold; font-size: 0.8rem; margin-bottom: 4px; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; }
+        .field { margin-bottom: 15px; text-align: left; }
+        .field label { display: block; font-weight: bold; font-size: 0.75rem; margin-bottom: 5px; color: #666; }
+        .field input, .field select { 
+            width: 100%; 
+            padding: 12px; 
+            border: 1px solid #ddd; 
+            border-radius: 10px; 
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
 
-        .footer { margin-top: 15px; font-size: 0.6rem; color: #bbb; }
+        .footer-note { margin-top: 20px; font-size: 0.7rem; color: #aaa; text-align: center; }
     </style>
 </head>
 <body>
 
-    <div id="card-pwa">
-        <button class="btn-edit-mini" onclick="toggleModal(true)">⚙️</button>
+    <div id="card-container">
+        <button class="btn-config" onclick="openEditor()">⚙️</button>
         
-        <div class="top-half">
-            <img id="profile-pic" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23ddd'/%3E%3C/svg%3E">
+        <div class="card-top">
+            <!-- La imagen se carga desde localStorage -->
+            <img id="display-photo" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23ccc'/%3E%3C/svg%3E">
         </div>
 
-        <div class="bottom-half">
-            <div class="user-info">
-                <h1 id="out-name">Nombre</h1>
-                <p class="role" id="out-role">Cargo / Profesión</p>
-                <span class="company-tag" id="out-comp">EMPRESA</span>
+        <div class="card-bottom">
+            <div class="info">
+                <h1 id="view-name">Tu Nombre</h1>
+                <p class="role" id="view-role">Tu Profesión</p>
+                <span class="company" id="view-comp">Nombre Empresa</span>
             </div>
 
-            <div class="social-display">
-                <div id="out-email">✉️ correo@ejemplo.com</div>
-                <div id="out-r1">Red 1: ...</div>
-                <div id="out-r2">Red 2: ...</div>
+            <div class="contact-details">
+                <div id="view-email">✉️ correo@ejemplo.com</div>
+                <div id="view-r1">Red 1: ...</div>
+                <div id="view-r2">Red 2: ...</div>
             </div>
 
-            <button class="btn-share" onclick="shareData()">
-                🚀 COMPARTIR CONTACTO
+            <button class="btn-share" onclick="shareContact()">
+                🚀 COMPARTIR DATOS
             </button>
         </div>
     </div>
 
-    <div class="footer">Idea de Tecnoprofedavid programada por Gemini</div>
+    <div class="footer-note">Idea de Tecnoprofedavid programada por Gemini</div>
 
-    <div id="modal-config">
-        <h2>Personalizar Tarjeta</h2>
-        <div class="form-field">
-            <label>Foto de Perfil</label>
-            <input type="file" accept="image/*" onchange="processImg(this)">
+    <!-- EDITOR -->
+    <div id="modal-editor">
+        <h2 style="color: var(--dark-green);">Configurar Tarjeta</h2>
+        
+        <div class="field">
+            <label>Foto de Perfil (Se guardará automáticamente)</label>
+            <input type="file" accept="image/*" id="input-photo" onchange="handleImage(this)">
         </div>
-        <div class="form-field"><label>Nombre</label><input type="text" id="in-name"></div>
-        <div class="form-field"><label>Cargo</label><input type="text" id="in-role"></div>
-        <div class="form-field"><label>Empresa</label><input type="text" id="in-comp"></div>
-        <hr>
-        <div class="form-field"><label>Email</label><input type="email" id="in-email"></div>
-        <div class="form-field">
+
+        <div class="field"><label>Nombre Completo</label><input type="text" id="input-name"></div>
+        <div class="field"><label>Cargo / Profesión</label><input type="text" id="input-role"></div>
+        <div class="field"><label>Empresa</label><input type="text" id="input-comp"></div>
+        <div class="field"><label>Correo Electrónico</label><input type="email" id="input-email"></div>
+
+        <div class="field">
             <label>Red Social 1</label>
-            <select id="in-r1t">
+            <select id="input-r1-type">
                 <option value="LinkedIn">LinkedIn</option>
                 <option value="Instagram">Instagram</option>
                 <option value="Web">Web</option>
             </select>
-            <input type="text" id="in-r1v" placeholder="Enlace o usuario">
+            <input type="text" id="input-r1-val" placeholder="URL o Usuario" style="margin-top:5px;">
         </div>
-        <div class="form-field">
+
+        <div class="field">
             <label>Red Social 2</label>
-            <select id="in-r2t">
-                <option value="WhatsApp">WhatsApp (Número)</option>
+            <select id="input-r2-type">
+                <option value="WhatsApp">WhatsApp</option>
                 <option value="TikTok">TikTok</option>
                 <option value="X">X (Twitter)</option>
             </select>
-            <input type="text" id="in-r2v" placeholder="Enlace o usuario">
+            <input type="text" id="input-r2-val" placeholder="Número o Usuario" style="margin-top:5px;">
         </div>
-        <button class="btn-share" style="width:100%" onclick="saveAll()">Guardar y Cerrar</button>
+
+        <button class="btn-share" style="width:100%; margin-top:10px;" onclick="saveData()">GUARDAR Y CERRAR</button>
     </div>
 
     <script>
-        // --- LÓGICA DE LA APP ---
-        function toggleModal(s) { document.getElementById('modal-config').style.display = s ? 'block' : 'none'; }
+        // ABRIR/CERRAR EDITOR
+        function openEditor() { document.getElementById('modal-editor').style.display = 'block'; }
+        function closeEditor() { document.getElementById('modal-editor').style.display = 'none'; }
 
-        function processImg(input) {
+        // PROCESAR Y GUARDAR IMAGEN (BASE64)
+        function handleImage(input) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
-                reader.onload = e => {
-                    document.getElementById('profile-pic').src = e.target.result;
-                    localStorage.setItem('pwa_final_img', e.target.result);
+                reader.onload = function(e) {
+                    const base64Image = e.target.result;
+                    document.getElementById('display-photo').src = base64Image;
+                    localStorage.setItem('pwa_user_photo', base64Image);
                 };
                 reader.readAsDataURL(input.files[0]);
             }
         }
 
-        function saveAll() {
-            const data = {
-                name: document.getElementById('in-name').value,
-                role: document.getElementById('in-role').value,
-                comp: document.getElementById('in-comp').value,
-                email: document.getElementById('in-email').value,
-                r1t: document.getElementById('in-r1t').value,
-                r1v: document.getElementById('in-r1v').value,
-                r2t: document.getElementById('in-r2t').value,
-                r2v: document.getElementById('in-r2v').value
+        // GUARDAR DATOS DE TEXTO
+        function saveData() {
+            const userData = {
+                name: document.getElementById('input-name').value,
+                role: document.getElementById('input-role').value,
+                comp: document.getElementById('input-comp').value,
+                email: document.getElementById('input-email').value,
+                r1t: document.getElementById('input-r1-type').value,
+                r1v: document.getElementById('input-r1-val').value,
+                r2t: document.getElementById('input-r2-type').value,
+                r2v: document.getElementById('input-r2-val').value
             };
-            localStorage.setItem('pwa_final_data', JSON.stringify(data));
-            render(data);
-            toggleModal(false);
+            localStorage.setItem('pwa_user_data', JSON.stringify(userData));
+            updateUI(userData);
+            closeEditor();
         }
 
-        function render(data) {
+        // ACTUALIZAR INTERFAZ
+        function updateUI(data) {
             if(!data) return;
-            document.getElementById('out-name').innerText = data.name || "Nombre";
-            document.getElementById('out-role').innerText = data.role || "Cargo";
-            document.getElementById('out-comp').innerText = data.comp || "Empresa";
-            document.getElementById('out-email').innerText = "✉️ " + (data.email || "correo@ejemplo.com");
-            document.getElementById('out-r1').innerText = data.r1t + ": " + (data.r1v || "...");
-            document.getElementById('out-r2').innerText = data.r2t + ": " + (data.r2v || "...");
-            
-            // Sync inputs
-            document.getElementById('in-name').value = data.name || "";
-            document.getElementById('in-role').value = data.role || "";
-            document.getElementById('in-comp').value = data.comp || "";
-            document.getElementById('in-email').value = data.email || "";
-            document.getElementById('in-r1v').value = data.r1v || "";
-            document.getElementById('in-r2v').value = data.r2v || "";
+            document.getElementById('view-name').innerText = data.name || "Nombre";
+            document.getElementById('view-role').innerText = data.role || "Profesión";
+            document.getElementById('view-comp').innerText = data.comp || "Empresa";
+            document.getElementById('view-email').innerText = "✉️ " + (data.email || "correo@ejemplo.com");
+            document.getElementById('view-r1').innerText = data.r1t + ": " + (data.r1v || "...");
+            document.getElementById('view-r2').innerText = data.r2t + ": " + (data.r2v || "...");
+
+            // Sincronizar inputs
+            document.getElementById('input-name').value = data.name || "";
+            document.getElementById('input-role').value = data.role || "";
+            document.getElementById('input-comp').value = data.comp || "";
+            document.getElementById('input-email').value = data.email || "";
+            document.getElementById('input-r1-val').value = data.r1v || "";
+            document.getElementById('input-r2-val').value = data.r2v || "";
         }
 
-        async function shareData() {
-            const d = JSON.parse(localStorage.getItem('pwa_final_data'));
-            if(!d) return alert("Configura tus datos primero");
+        // COMPARTIR COMO TEXTO CON LINKS
+        async function shareContact() {
+            const data = JSON.parse(localStorage.getItem('pwa_user_data'));
+            if(!data) return alert("Por favor, configura tus datos primero.");
 
-            const msg = `📇 *Tarjeta Digital: ${d.name}*\n📌 ${d.role} en ${d.comp}\n\n📧 *Email:* mailto:${d.email}\n🔗 *${d.r1t}:* ${d.r1v}\n🔗 *${d.r2t}:* ${d.r2v}`;
+            const shareText = `📇 Tarjeta de Contacto: ${data.name}\n📌 ${data.role} en ${data.comp}\n\n📧 Email: mailto:${data.email}\n🔗 ${data.r1t}: ${data.r1v}\n🔗 ${data.r2t}: ${data.r2v}\n\nEnviado desde mi Tarjeta PWA`;
 
             if (navigator.share) {
-                navigator.share({ title: 'Mi Contacto', text: msg });
+                try {
+                    await navigator.share({ title: 'Mi Contacto', text: shareText });
+                } catch (err) { console.log("Error al compartir", err); }
             } else {
-                navigator.clipboard.writeText(msg);
-                alert("Copiado al portapapeles");
+                navigator.clipboard.writeText(shareText);
+                alert("Copiado al portapapeles (Tu dispositivo no soporta compartir directamente).");
             }
         }
 
-        // --- LÓGICA PWA (MANIFEST & SERVICE WORKER) ---
+        // CARGA INICIAL
         window.onload = () => {
-            const d = JSON.parse(localStorage.getItem('pwa_final_data'));
-            const img = localStorage.getItem('pwa_final_img');
-            if(d) render(d);
-            if(img) document.getElementById('profile-pic').src = img;
+            const savedData = JSON.parse(localStorage.getItem('pwa_user_data'));
+            const savedPhoto = localStorage.getItem('pwa_user_photo');
+            
+            if(savedData) updateUI(savedData);
+            if(savedPhoto) document.getElementById('display-photo').src = savedPhoto;
 
-            // Inyectar Manifest dinámico
-            const myManifest = {
-                "name": "Tarjeta Digital",
-                "short_name": "Contacto",
-                "start_url": "./",
-                "display": "standalone",
-                "background_color": "#1b5e20",
-                "theme_color": "#1b5e20",
-                "icons": [{
-                    "src": "https://via.placeholder.com/512/1b5e20/ffffff?text=Card",
-                    "sizes": "512x512",
-                    "type": "image/png"
-                }]
-            };
-            const manifestStr = JSON.stringify(myManifest);
-            const blob = new Blob([manifestStr], {type: 'application/json'});
-            const manifestURL = URL.createObjectURL(blob);
-            document.querySelector('head').innerHTML += `<link rel="manifest" href="${manifestURL}">`;
-
-            // Registrar Service Worker
+            // Registro de Service Worker para PWA (Offline)
             if ('serviceWorker' in navigator) {
-                const swCode = `
-                    self.addEventListener('install', e => {
-                        e.waitUntil(caches.open('pwa-v1').then(c => c.addAll(['./'])));
-                    });
-                    self.addEventListener('fetch', e => {
-                        e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
-                    });
-                `;
-                const swBlob = new Blob([swCode], {type: 'text/javascript'});
-                navigator.serviceWorker.register(URL.createObjectURL(swBlob));
+                const sw = `self.addEventListener('install', e => e.waitUntil(caches.open('v1').then(c => c.addAll(['./']))));
+                            self.addEventListener('fetch', e => e.respondWith(caches.match(e.request).then(r => r || fetch(e.request))));`;
+                const blob = new Blob([sw], {type: 'text/javascript'});
+                navigator.serviceWorker.register(URL.createObjectURL(blob));
             }
         };
     </script>
