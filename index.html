@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta name="theme-color" content="#1b5e20">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="Tarjeta de Contacto Digital - Tecnoprofedavid">
+    
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+<script>
+    // Dentro de tu objeto myManifest, asegúrate de que los iconos coincidan:
+    "icons": [
+        {
+            "src": "icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+</script>
+    
+Consejos Pro de Diseño:
+
+    <title>Contacto PWA</title>
+
+    <style>
+        :root {
+            --primary-green: #2e7d32;
+            --dark-green: #1b5e20;
+            --pure-white: #ffffff;
+            --bg-page: #f0f4f0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--bg-page);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* TARJETA MITAD VERDE MITAD BLANCA */
+        #card-pwa {
+            width: 100%;
+            max-width: 340px;
+            background: var(--pure-white);
+            border: 4px solid var(--dark-green);
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            overflow: hidden;
+            position: relative;
+            text-align: center;
+        }
+
+        /* BOTÓN EDITAR MINI */
+        .btn-edit-mini {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(0,0,0,0.2);
+            border: none;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* SECCIÓN SUPERIOR VERDE (50%) */
+        .top-half {
+            height: 160px;
+            background: var(--primary-green);
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            padding-bottom: 20px;
+        }
+
+        #profile-pic {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            border: 5px solid var(--pure-white);
+            object-fit: cover;
+            background: #eee;
+            margin-bottom: -65px;
+            z-index: 5;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        /* SECCIÓN INFERIOR BLANCA (50%) */
+        .bottom-half {
+            padding: 80px 20px 25px 20px;
+            background: var(--pure-white);
+        }
+
+        .user-info h1 { margin: 0; font-size: 1.6rem; color: var(--dark-green); }
+        .user-info p.role { margin: 5px 0; color: #555; font-size: 1rem; }
+        .user-info .company-tag {
+            font-weight: bold;
+            color: var(--primary-green);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .social-display {
+            font-size: 0.85rem;
+            color: #444;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        /* BOTÓN SHARE TEXTO */
+        .btn-share {
+            background: var(--primary-green);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        /* MODAL */
+        #modal-config {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: white;
+            z-index: 100;
+            padding: 25px;
+            overflow-y: auto;
+        }
+
+        .form-field { margin-bottom: 12px; text-align: left; }
+        label { display: block; font-weight: bold; font-size: 0.8rem; margin-bottom: 4px; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; }
+
+        .footer { margin-top: 15px; font-size: 0.6rem; color: #bbb; }
+    </style>
+</head>
+<body>
+
+    <div id="card-pwa">
+        <button class="btn-edit-mini" onclick="toggleModal(true)">⚙️</button>
+        
+        <div class="top-half">
+            <img id="profile-pic" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23ddd'/%3E%3C/svg%3E">
+        </div>
+
+        <div class="bottom-half">
+            <div class="user-info">
+                <h1 id="out-name">Nombre</h1>
+                <p class="role" id="out-role">Cargo / Profesión</p>
+                <span class="company-tag" id="out-comp">EMPRESA</span>
+            </div>
+
+            <div class="social-display">
+                <div id="out-email">✉️ correo@ejemplo.com</div>
+                <div id="out-r1">Red 1: ...</div>
+                <div id="out-r2">Red 2: ...</div>
+            </div>
+
+            <button class="btn-share" onclick="shareData()">
+                🚀 COMPARTIR CONTACTO
+            </button>
+        </div>
+    </div>
+
+    <div class="footer">Idea de Tecnoprofedavid programada por Gemini</div>
+
+    <div id="modal-config">
+        <h2>Personalizar Tarjeta</h2>
+        <div class="form-field">
+            <label>Foto de Perfil</label>
+            <input type="file" accept="image/*" onchange="processImg(this)">
+        </div>
+        <div class="form-field"><label>Nombre</label><input type="text" id="in-name"></div>
+        <div class="form-field"><label>Cargo</label><input type="text" id="in-role"></div>
+        <div class="form-field"><label>Empresa</label><input type="text" id="in-comp"></div>
+        <hr>
+        <div class="form-field"><label>Email</label><input type="email" id="in-email"></div>
+        <div class="form-field">
+            <label>Red Social 1</label>
+            <select id="in-r1t">
+                <option value="LinkedIn">LinkedIn</option>
+                <option value="Instagram">Instagram</option>
+                <option value="Web">Web</option>
+            </select>
+            <input type="text" id="in-r1v" placeholder="Enlace o usuario">
+        </div>
+        <div class="form-field">
+            <label>Red Social 2</label>
+            <select id="in-r2t">
+                <option value="WhatsApp">WhatsApp (Número)</option>
+                <option value="TikTok">TikTok</option>
+                <option value="X">X (Twitter)</option>
+            </select>
+            <input type="text" id="in-r2v" placeholder="Enlace o usuario">
+        </div>
+        <button class="btn-share" style="width:100%" onclick="saveAll()">Guardar y Cerrar</button>
+    </div>
+
+    <script>
+        // --- LÓGICA DE LA APP ---
+        function toggleModal(s) { document.getElementById('modal-config').style.display = s ? 'block' : 'none'; }
+
+        function processImg(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    document.getElementById('profile-pic').src = e.target.result;
+                    localStorage.setItem('pwa_final_img', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function saveAll() {
+            const data = {
+                name: document.getElementById('in-name').value,
+                role: document.getElementById('in-role').value,
+                comp: document.getElementById('in-comp').value,
+                email: document.getElementById('in-email').value,
+                r1t: document.getElementById('in-r1t').value,
+                r1v: document.getElementById('in-r1v').value,
+                r2t: document.getElementById('in-r2t').value,
+                r2v: document.getElementById('in-r2v').value
+            };
+            localStorage.setItem('pwa_final_data', JSON.stringify(data));
+            render(data);
+            toggleModal(false);
+        }
+
+        function render(data) {
+            if(!data) return;
+            document.getElementById('out-name').innerText = data.name || "Nombre";
+            document.getElementById('out-role').innerText = data.role || "Cargo";
+            document.getElementById('out-comp').innerText = data.comp || "Empresa";
+            document.getElementById('out-email').innerText = "✉️ " + (data.email || "correo@ejemplo.com");
+            document.getElementById('out-r1').innerText = data.r1t + ": " + (data.r1v || "...");
+            document.getElementById('out-r2').innerText = data.r2t + ": " + (data.r2v || "...");
+            
+            // Sync inputs
+            document.getElementById('in-name').value = data.name || "";
+            document.getElementById('in-role').value = data.role || "";
+            document.getElementById('in-comp').value = data.comp || "";
+            document.getElementById('in-email').value = data.email || "";
+            document.getElementById('in-r1v').value = data.r1v || "";
+            document.getElementById('in-r2v').value = data.r2v || "";
+        }
+
+        async function shareData() {
+            const d = JSON.parse(localStorage.getItem('pwa_final_data'));
+            if(!d) return alert("Configura tus datos primero");
+
+            const msg = `📇 *Tarjeta Digital: ${d.name}*\n📌 ${d.role} en ${d.comp}\n\n📧 *Email:* mailto:${d.email}\n🔗 *${d.r1t}:* ${d.r1v}\n🔗 *${d.r2t}:* ${d.r2v}`;
+
+            if (navigator.share) {
+                navigator.share({ title: 'Mi Contacto', text: msg });
+            } else {
+                navigator.clipboard.writeText(msg);
+                alert("Copiado al portapapeles");
+            }
+        }
+
+        // --- LÓGICA PWA (MANIFEST & SERVICE WORKER) ---
+        window.onload = () => {
+            const d = JSON.parse(localStorage.getItem('pwa_final_data'));
+            const img = localStorage.getItem('pwa_final_img');
+            if(d) render(d);
+            if(img) document.getElementById('profile-pic').src = img;
+
+            // Inyectar Manifest dinámico
+            const myManifest = {
+                "name": "Tarjeta Digital",
+                "short_name": "Contacto",
+                "start_url": "./",
+                "display": "standalone",
+                "background_color": "#1b5e20",
+                "theme_color": "#1b5e20",
+                "icons": [{
+                    "src": "https://via.placeholder.com/512/1b5e20/ffffff?text=Card",
+                    "sizes": "512x512",
+                    "type": "image/png"
+                }]
+            };
+            const manifestStr = JSON.stringify(myManifest);
+            const blob = new Blob([manifestStr], {type: 'application/json'});
+            const manifestURL = URL.createObjectURL(blob);
+            document.querySelector('head').innerHTML += `<link rel="manifest" href="${manifestURL}">`;
+
+            // Registrar Service Worker
+            if ('serviceWorker' in navigator) {
+                const swCode = `
+                    self.addEventListener('install', e => {
+                        e.waitUntil(caches.open('pwa-v1').then(c => c.addAll(['./'])));
+                    });
+                    self.addEventListener('fetch', e => {
+                        e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
+                    });
+                `;
+                const swBlob = new Blob([swCode], {type: 'text/javascript'});
+                navigator.serviceWorker.register(URL.createObjectURL(swBlob));
+            }
+        };
+    </script>
+</body>
+</html>
